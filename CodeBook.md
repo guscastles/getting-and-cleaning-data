@@ -4,12 +4,13 @@ This code book describes the variables from the dataset produced by the accelero
 
 The original code book gives the description
 
-> - Triaxial acceleration from the accelerometer (total acceleration) and the estimated body acceleration.
+- Triaxial acceleration from the accelerometer (total acceleration) and the estimated body acceleration.
 - Triaxial Angular velocity from the gyroscope.
 - A 561-feature vector with time and frequency domain variables.
 - Its activity label.
 - An identifier of the subject who carried out the experiment.
 
+## The Process
 The dataset was collected from the url
 
 > https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
@@ -20,13 +21,38 @@ using the function
 fetch_data(url)
 ```
 
-in ***run_analysis.R***. The script can be loaded with the usual command
+in *run_analysis.R*. The script can be loaded with the usual command
 
 ```
 source("run_analysis.R")
 ```
+
+Verifying the training sets. First the necessary libraries are loaded
+
+Each dataset has 561 fields, according to the features_info.txt, so from the text file, each field has a width of 16 characters, counting the space between the values
+
+Reading the data using read.fwf, passing the field_widths function as a parameter for the field widths, the read_data function is used
+
+Additional data from the activities and labels datasets are fetched with read_additional_data function, since they have a different structure (space delimited)
+
+Once read and merged with subjects and labels, the train and test datasets are joined with rbind function
+
+To create meaningful column names, the features_info.txt file will be used, with each name being tidy up by removing special characters “(”, “)”, and “,”. This last one will be replaced by “-”, so the separation of numbers are preserved
+
+The function fetch_and_clean executes the previous functions. It is run without any parameters and return a tidy dataset, with train and test data joined
+
+Once the fetch_and_clean function is run, the mean and standard deviation values are extractred, along with subject and activities
+
+Then, the averages of all mean and standard deviation values are calculated
+
+For the final step, the files are written on disk
+
+To run the whole project use function run_project, with no parameters required
+
 ## The Modified Field Names
-> - subject
+The bands energy measurements were especially renamed to reflect the axis to which they beloged. This was achieved by adding the suffixes "_x", "_y", and "_z" accordingly.
+
+- subject
 - activity
 - tbodyacc_mean_x
 - tbodyacc_mean_y
