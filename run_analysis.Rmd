@@ -1,4 +1,0 @@
----
-title: "Getting And Cleaning Data - Peer-reviewed Programming Assignment"
-output: html_notebook
----
