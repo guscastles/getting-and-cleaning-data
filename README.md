@@ -16,15 +16,13 @@ The script *run_analisys.R* contains the functions
 
 - run_project
 - download_data
-- read_data
-- read_additional_data
-- join_datasets
-- create_column_names
-- change_bands_energy_names
 - fetch_and_clean
 - fetch_subjects
 - fetch_activities
-- fetch_train_set
+- fetch_features_set
+- join_datasets
+- create_column_names
+- change_bands_energy_names
 - create_mean_and_std_deviation_dataset
 - create_average_of_mean_and_std
 - create_dataset_files
@@ -49,3 +47,5 @@ run_project()
 After it finishes, the two datasets are located int the current working directory.
 
 ## Conclusion
+
+The two most challeging steps in the project were identifying the format of the source dataset (16 character-witdth for each measurement feature) and identifying the repeated names for the bands energy features for each axis. Overall, a good challenge, with lots of applications from the knowledge of the whole course.

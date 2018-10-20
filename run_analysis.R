@@ -46,10 +46,10 @@ download_data <- function(url) {
 fetch_and_clean <- function() {
         train_data <- tbl_df(cbind(fetch_subjects("train"),
                                    fetch_activities("train"),
-                                   fetch_train_set("train")))
+                                   fetch_features_set("train")))
         test_data <- tbl_df(cbind(fetch_subjects("test"),
                                   fetch_activities("test"),
-                                  fetch_train_set("test")))
+                                  fetch_features_set("test")))
         join_datasets(train_data, test_data)
 }
 
@@ -68,24 +68,27 @@ fetch_subjects <- function(data_set_indicator) {
 # Returns a data.frame object containing the activities labels,
 # in self-explanative format.
 fetch_activities <- function(data_set_indicator) {
-        train_labels <- read_additional_data(paste("UCI HAR Dataset",
+        raw_labels_data <- read_additional_data(paste("UCI HAR Dataset",
                                                    data_set_indicator,
                                                    paste0("y_", data_set_indicator, ".txt"),
                                                    sep = "/"))
         labels <- read_additional_data("UCI HAR Dataset/activity_labels.txt")
-        activities <- train_labels %>%
+        activities <- raw_labels_data %>%
                 mutate(activity = labels[V1, "V2"]) %>%
                 select(activity)
         colnames(activities) <- c("activity")
         activities                
 }
 
-fetch_train_set <- function(data_set) {
-        train_set <- read_data(paste("UCI HAR Dataset",
-                                     data_set, paste0("X_", data_set, ".txt"),
+
+# Receives a data_set_indicator (values are train or test).
+# Returns a data.frame object containing the features dataset.
+fetch_features_set <- function(data_set_indicator) {
+        dataset <- read_data(paste("UCI HAR Dataset",
+                                     data_set_indicator, paste0("X_", data_set_indicator, ".txt"),
                                      sep = "/"))
-        colnames(train_set) <- create_column_names("UCI HAR Dataset/features.txt")
-        train_set        
+        colnames(dataset) <- create_column_names("UCI HAR Dataset/features.txt")
+        dataset        
 }
 
 # Reads the data from filename using function *read.fwf*. Optionally 
@@ -151,15 +154,17 @@ change_bands_energy_names <- function(col_names) {
         col_names$V2
 }
 
-# Once the *fetch_and_clean* function is run, the mean and standard deviation
-# values are extractred, along with subject and activities
+# Receives the full dataset and returns a dataset with 
+# the mean and standard deviation features only, along with
+# the subjects and activities values.
 create_mean_and_std_deviation_dataset <- function(dataset) {
         cols <- grep("subject|activity|mean|std", colnames(dataset))
         col_names <- colnames(dataset)[cols]
         dataset[col_names]
 }
 
-# Then, the averages of all mean and standard deviation values are calculated
+# Receives the dataset with the mean and standard deviation features only
+# and return a dataset with the average values for each feature.
 create_average_of_mean_and_std <- function(dataset) {
         avg <- as.data.frame(sapply(dataset, mean))
         colnames(avg) <- c("average")
@@ -168,7 +173,9 @@ create_average_of_mean_and_std <- function(dataset) {
         average
 }
 
-# For the final step, the files are written on disk
+# Receives the mean and standard deviation features dataset mean_stdev_data
+# and their average dataset average_data. Writes both datasets to disk,
+# with names mean_and_std_dataset.csv and average_dataset.csv.
 create_dataset_files <- function(mean_stdev_data, average_data) {
         write.csv(mean_stdev_data, file = "mean_and_std_dataset.csv", row.names = FALSE)
         write.csv(average_data, file = "average_dataset.csv", row.names = FALSE)
