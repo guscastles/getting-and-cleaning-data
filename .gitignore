@@ -7,3 +7,5 @@ UCI HAR Dataset/
 change.R
 run_analysis.Rmd
 run_analysis.nb.html
+.ipynb_checkpoints/
+*.ipynb

@@ -54,12 +54,22 @@ using the function *fetch_data(url)*. Unzipping the file produces a directory ca
 The files in the *Inertial Signals* folder were not considered for this project.
 
 ### Fetching The Features Datasets
-The datasets in the *X_test.txt* and *X_train.txt* files have 561 fields, according to the *features_info.txt*. Each field has a width of 16 characters, counting the space between the values. The was done using function *fetch_features_set*, which will also create the clean columns names.
+The datasets in the *X_test.txt* and *X_train.txt* files have 561 fields, according to the *features_info.txt*. Function *fetch_and_clean* orchestrates the reading and cleaning of the main dataset. 
 
-#### Column Names
-Each column was extracted from *features.txt* file and removed from all non-alphabetical and non-numerical characters, i.e., "(", ")", "-", and ",", being replaced by "_".
+Each feature has a width of 16 characters in the CSV file, including the space between the values. Fetching is done by is done by function *fetch_features_set* (underlying R function is *read.fwf*), which also creates the columns names.
 
-Additional data from the activities and labels datasets are fetched with read_additional_data function, since they have a different structure (space delimited)
+> **Column Names**<br>
+Each column is extracted from *features.txt* file and all non-alphabetical and non-numerical characters are removed, i.e., "(", ")", "-", and ",", and replaced by "_".
+
+Additional data from the activities and subjects datasets are fetched with *fetch_activities* and *fetch_subjects* functions. Since they have a different structure (space delimited), the underlying R function to read them is *read.delim*. 
+
+> **Activities**<br>
+There are two main files to understand the activities labels: *activity_labels.txt* and the *y_(train/test).txt* files. Function *fetch_activities* read both and match each row in *y_(train/test).txt* files with the appropriate label in *activity_labels.txt*, producing a dataset that is as long as the former, with the descriptive names replacing the number code.
+
+The structure of the activities dataset has just one column
+
+> activity
+
 
 Once read and merged with subjects and labels, the train and test datasets are joined with rbind function
 
