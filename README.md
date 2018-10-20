@@ -3,8 +3,7 @@
 
 This project contains 3 main files:
 
-> - run_analysis.R 
--- Contains all the R scripts used to achieve the project's goal
+- run_analysis.R -- Contains all the R functions used to achieve the project's goal
 - CodeBook.md -- The code book explaining all variables and datasets, including how to get the original dataset and how the functions work
 - This README.md -- The main guide for the project
 - download_timestamp.txt -- Contains the download time of the source dataset
@@ -15,7 +14,7 @@ This is the original dataset url
 
 The script *run_analisys.R* contains the functions
 
-> - run_project
+- run_project
 - download_data
 - read_data
 - read_additional_data
