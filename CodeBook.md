@@ -11,27 +11,53 @@ The original code book gives the description
 - An identifier of the subject who carried out the experiment.
 
 ## The Process
+### Downloading the Source Dataset
 The dataset was collected from the url
 
 > https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 
-using the function 
+using the function *fetch_data(url)*. Unzipping the file produces a directory called *UCI HAR Dataset*, with the following tree structure:
 
-```
-fetch_data(url)
-```
+- activity_labels.txt
+- features_info.txt
+- features.txt
+- README.txt
+  - test
+    - Inertial Signals
+      - body_acc_x_test.txt
+      - body_acc_y_test.txt
+      - body_acc_z_test.txt
+      - body_gyro_x_test.txt
+      - body_gyro_y_test.txt
+      - body_gyro_z_test.txt
+      - total_acc_x_test.txt
+      - total_acc_y_test.txt
+      - total_acc_z_test.txt
+    - subject_test.txt
+    - X_test.txt
+    - y_test.txt
+  - train
+    - Inertial Signals
+      - body_acc_x_train.txt
+      - body_acc_y_train.txt
+      - body_acc_z_train.txt
+      - body_gyro_x_train.txt
+      - body_gyro_y_train.txt
+      - body_gyro_z_train.txt
+      - total_acc_x_train.txt
+      - total_acc_y_train.txt
+      - total_acc_z_train.txt
+    - subject_train.txt
+    - X_train.txt
+    - y_train.txt
 
-in *run_analysis.R*. The script can be loaded with the usual command
+The files in the *Inertial Signals* folder were not considered for this project.
 
-```
-source("run_analysis.R")
-```
+### Fetching The Features Datasets
+The datasets in the *X_test.txt* and *X_train.txt* files have 561 fields, according to the *features_info.txt*. Each field has a width of 16 characters, counting the space between the values. The was done using function *fetch_features_set*, which will also create the clean columns names.
 
-Verifying the training sets. First the necessary libraries are loaded
-
-Each dataset has 561 fields, according to the features_info.txt, so from the text file, each field has a width of 16 characters, counting the space between the values
-
-Reading the data using read.fwf, passing the field_widths function as a parameter for the field widths, the read_data function is used
+#### Column Names
+Each column was extracted from *features.txt* file and removed from all non-alphabetical and non-numerical characters, i.e., "(", ")", "-", and ",", being replaced by "_".
 
 Additional data from the activities and labels datasets are fetched with read_additional_data function, since they have a different structure (space delimited)
 
@@ -50,6 +76,8 @@ For the final step, the files are written on disk
 To run the whole project use function run_project, with no parameters required
 
 ## The Modified Field Names
+From the original dataset, the columns *subject* and *activity* were added, as described above.
+
 The bands energy measurements were especially renamed to reflect the axis to which they beloged. This was achieved by adding the suffixes "_x", "_y", and "_z" accordingly.
 
 - subject
