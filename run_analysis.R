@@ -5,7 +5,9 @@ library(tidyr)
 library(dplyr)
 library(lubridate)
 
-# To run the whole project use function *run_project*, with no parameters required
+# Runs all necessary functions to accomplish the goal of the project.
+# Creates the two outcome datasets and the timestamp file, as 
+# explained int the README.md document.
 run_project <- function() {
         
         message <- function(msg) {
@@ -51,19 +53,24 @@ fetch_and_clean <- function() {
         join_datasets(train_data, test_data)
 }
 
-fetch_subjects <- function(data_set) {
+# Receives a data_set_indicator (values are train or test).
+# Returns a data.frame object containing the subject numbers.
+fetch_subjects <- function(data_set_indicator) {
         subjects <- read_additional_data(paste("UCI HAR Dataset",
-                                               data_set,
-                                               paste0("subject_", data_set, ".txt"),
+                                               data_set_indicator,
+                                               paste0("subject_", data_set_indicator, ".txt"),
                                                sep = "/"))
         colnames(subjects) <- c("subject")
         subjects
 }
 
-fetch_activities <- function(data_set) {
+# Receives a data_set_indicator (values are train or test).
+# Returns a data.frame object containing the activities labels,
+# in self-explanative format.
+fetch_activities <- function(data_set_indicator) {
         train_labels <- read_additional_data(paste("UCI HAR Dataset",
-                                                   data_set,
-                                                   paste0("y_", data_set, ".txt"),
+                                                   data_set_indicator,
+                                                   paste0("y_", data_set_indicator, ".txt"),
                                                    sep = "/"))
         labels <- read_additional_data("UCI HAR Dataset/activity_labels.txt")
         activities <- train_labels %>%
@@ -81,10 +88,9 @@ fetch_train_set <- function(data_set) {
         train_set        
 }
 
-# Verifying the training sets. First the necessary libraries are loaded
-
-# Reading the data using *read.fwf*, passing the *field_widths* function
-# as a parameter for the field widths, the *read_data* function is used
+# Reads the data from filename using function *read.fwf*. Optionally 
+# receives number_of_lines, indicating how many lines should be read
+# from the file. Returns the raw dataset.
 read_data <- function(filename, number_of_lines = -1) {
         
         field_widths <- function() {
@@ -96,13 +102,14 @@ read_data <- function(filename, number_of_lines = -1) {
 
 # Additional data from the activities and labels datasets are fetched
 # with *read_additional_data* function, since they have a different
-# structure (space delimited)
-read_additional_data <- function(filename, number_of_rows = -1) {
-        read.delim(filename, sep = " ", header = FALSE, nrows = number_of_rows)
+# structure (space delimited). Receives the filename and, optionally,
+# the number_of_lines to be read. Returns the raw dataset.
+read_additional_data <- function(filename, number_of_lines = -1) {
+        read.delim(filename, sep = " ", header = FALSE, nrows = number_of_lines)
 }
 
-# Once read and merged with subjects and labels, the
-# train and test datasets are joined with *rbind* function
+# Joins two datasets given by first_set and second_set
+# returning the result from the rbind function.
 join_datasets <- function(first_set, second_set) {
         rbind(first_set, second_set)
 }
