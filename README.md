@@ -29,9 +29,11 @@ The script *run_analisys.R* contains the functions with descriptive comments for
 
 Besides the script and documentation files, two datasets are include
 
-> mean_and_std_dataset.csv<br><div style="margin: 10px 0 0 40px">The dataset with mean and standard deviations values, as well as the subject numbers and the descriptive activities</div>
+> **mean_and_std_dataset.csv**<br>
+The dataset with mean and standard deviation values, as well as the subject numbers and the descriptive activities
 
-> average_dataset.csv<br><div style="margin: 10px 0 0 40px">The average values for all mean measurements</div>
+> **average_dataset.csv**<br>
+The average values for all mean and standard deviation measurements
 
 ## Executing the Project
 
@@ -42,6 +44,6 @@ run_project()
 ```
 After it finishes, the two datasets are located int the current working directory.
 
-## Conclusion
+## Final Thoughts
 
 The two most challeging steps in the project were identifying the format of the source dataset (16 character-witdth for each measurement feature) and identifying the repeated names for the bands energy features for each axis. Overall, a good challenge, with lots of applications from the knowledge of the whole course.
