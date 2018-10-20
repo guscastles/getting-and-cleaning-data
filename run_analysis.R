@@ -13,7 +13,7 @@ run_project <- function() {
         }
         
         message("Downloading source dataset...")
-        #download_data("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
+        download_data("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
         message("Cleaning and joining train and test datasets...")
         data <- fetch_and_clean()
         message("Creating the mean and standard deviation dataset...")
@@ -38,7 +38,9 @@ download_data <- function(url) {
         dest_file
 }
 
-# The function *fetch_and_clean* executes the previous functions. It is run without any parameters and return a tidy dataset, with train and test data joined
+# The function *fetch_and_clean* executes the previous functions. 
+# It is run without any parameters and return a tidy dataset,
+# with train and test data joined
 fetch_and_clean <- function() {
         train_data <- tbl_df(cbind(fetch_subjects("train"),
                                    fetch_activities("train"),
@@ -81,7 +83,8 @@ fetch_train_set <- function(data_set) {
 
 # Verifying the training sets. First the necessary libraries are loaded
 
-# Reading the data using *read.fwf*, passing the *field_widths* function as a parameter for the field widths, the *read_data* function is used
+# Reading the data using *read.fwf*, passing the *field_widths* function
+# as a parameter for the field widths, the *read_data* function is used
 read_data <- function(filename, number_of_lines = -1) {
         
         field_widths <- function() {
@@ -91,17 +94,18 @@ read_data <- function(filename, number_of_lines = -1) {
         read.fwf(filename, widths = field_widths(), n = number_of_lines)
 }
 
-# Additional data from the activities and labels datasets are fetched with *read_additional_data* function, since they have a different structure (space delimited)
+# Additional data from the activities and labels datasets are fetched
+# with *read_additional_data* function, since they have a different
+# structure (space delimited)
 read_additional_data <- function(filename, number_of_rows = -1) {
         read.delim(filename, sep = " ", header = FALSE, nrows = number_of_rows)
 }
 
-# Once read and merged with subjects and labels, the train and test datasets are joined with *rbind* function
+# Once read and merged with subjects and labels, the
+# train and test datasets are joined with *rbind* function
 join_datasets <- function(first_set, second_set) {
         rbind(first_set, second_set)
 }
-
-# To create meaningful column names, the *features_info.txt file* will be used, with each name being tidy up by removing special characters "(", ")", and ",". This last one will be replaced by "-", so the separation of numbers are preserved
 
 # Receives a filename of the data file containing the column names
 # of the dataset and return a modified vector with unique column
@@ -140,7 +144,8 @@ change_bands_energy_names <- function(col_names) {
         col_names$V2
 }
 
-# Once the *fetch_and_clean* function is run, the mean and standard deviation values are extractred, along with subject and activities
+# Once the *fetch_and_clean* function is run, the mean and standard deviation
+# values are extractred, along with subject and activities
 create_mean_and_std_deviation_dataset <- function(dataset) {
         cols <- grep("subject|activity|mean|std", colnames(dataset))
         col_names <- colnames(dataset)[cols]
