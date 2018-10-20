@@ -65,7 +65,7 @@ fetch_subjects <- function(data_set_indicator) {
 
 # Receives a data_set_indicator (values are train or test).
 # Returns a data.frame object containing the activities labels,
-# in self-explanative format.
+# in descriptive format.
 fetch_activities <- function(data_set_indicator) {
         raw_labels_data <- read_additional_data(paste("UCI HAR Dataset",
                                                    data_set_indicator,

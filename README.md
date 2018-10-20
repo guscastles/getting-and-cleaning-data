@@ -12,7 +12,7 @@ This is the original dataset url
 
 > https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 
-The script *run_analisys.R* contains the functions
+The script *run_analisys.R* contains the functions with descriptive comments for each one:
 
 - run_project
 - download_data
