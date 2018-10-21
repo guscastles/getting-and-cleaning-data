@@ -2,21 +2,13 @@
 
 This code book describes the variables from the dataset produced by the accelerometers of the Samsun Galaxy S smartphone.
 
-The original code book gives the description
-
-- Triaxial acceleration from the accelerometer (total acceleration) and the estimated body acceleration.
-- Triaxial Angular velocity from the gyroscope.
-- A 561-feature vector with time and frequency domain variables.
-- Its activity label.
-- An identifier of the subject who carried out the experiment.
-
 ## The Process
 ### Downloading the Source Dataset
-The dataset was collected from the url
+The dataset was collected from the url below using the function *fetch_data*.
 
 > https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 
-using the function *fetch_data(url)*. Unzipping the file produces a directory called *UCI HAR Dataset*, with the following tree structure:
+Unzipping the file produces a directory called *UCI HAR Dataset*, with the following tree structure:
 
 - activity_labels.txt
 - features_info.txt
@@ -51,7 +43,7 @@ using the function *fetch_data(url)*. Unzipping the file produces a directory ca
   - X_train.txt
   - y_train.txt
 
-The files in the *Inertial Signals* folders were not considered for this project.
+> The files in the *Inertial Signals* folders were not considered for this project.
 
 ### Fetching The Features Datasets
 The datasets in the *X_test.txt* and *X_train.txt* files have 561 fields, according to the *features_info.txt*. Function *fetch_and_clean* orchestrates the reading and cleaning of the main dataset. 
@@ -59,7 +51,9 @@ The datasets in the *X_test.txt* and *X_train.txt* files have 561 fields, accord
 Each feature has a width of 16 characters in the CSV file, including the space between the values. Fetching is done by is done by function *fetch_features_set* (underlying R function is *read.fwf*), which also creates the columns names.
 
 > **Column Names**<br>
-Each column is extracted from *features.txt* file and all non-alphabetical and non-numerical characters are removed, i.e., "(", ")", "-", and ",", and replaced by "_".
+Each column is extracted from *features.txt* file and all non-alphabetical and non-numerical characters are removed, i.e., "(", ")", "-", and ",". "," and "-" are replaced by "_", so the separation of numbers are preserved. Also they are converted to lowercase.<br><br>The bands energy measurements were especially renamed to reflect the axis to which they beloged. This was achieved by adding the suffixes "_x", "_y", and "_z" accordingly. Function *change_bands_energy_names* performs this task.
+
+### Subjects and Activities Datasets
 
 Additional data from the activities and subjects datasets are fetched with *fetch_activities* and *fetch_subjects* functions. Since they have a different structure (space delimited), the underlying R function to read them is *read.delim*. 
 
@@ -68,15 +62,19 @@ There are two main files to understand the activities labels: *activity_labels.t
 
 The structure of the activities dataset has just one column
 
-> activity
+- activity
 
-Once read and merged with subjects and labels, the train and test datasets are joined with rbind function
+The subjects dataset is extracted from *subject_(test/train).txt* files by function *fetch_subjects*.
 
-To create meaningful column names, the features_info.txt file will be used, with each name being tidy up by removing special characters “(”, “)”, and “,”. This last one will be replaced by “-”, so the separation of numbers are preserved
+The structure of the subjects dataset has just one column
 
-The function fetch_and_clean executes the previous functions. It is run without any parameters and return a tidy dataset, with train and test data joined
+- subject
 
-Once the fetch_and_clean function is run, the mean and standard deviation values are extractred, along with subject and activities
+After the train, subjects and activities datasets are merged, the test dataset is joined using R function *rbind* in function *join_datasets*.
+
+### The Mean and Standard Deviation Datasets
+
+Once the *fetch_and_clean* function is run, the mean and standard deviation values are extractred, along with subject and activity features, accomplished by *create_mean_and_std_deviation_dataset* and *create_average_of_mean_and_std*.
 
 Then, the averages of all mean and standard deviation values are calculated
 
@@ -84,10 +82,14 @@ For the final step, the files are written on disk
 
 To run the whole project use function run_project, with no parameters required
 
-## The Modified Field Names
-From the original dataset, the columns *subject* and *activity* were added, as described above.
+### The Main Function
 
-The bands energy measurements were especially renamed to reflect the axis to which they beloged. This was achieved by adding the suffixes "_x", "_y", and "_z" accordingly.
+The function *run_project* executes the previous functions. It is run without any parameters and produces the two datasets.
+
+## The Mean and Standard Deviation Dataset
+
+### **mean_and_std_dataset.csv**
+From the original dataset, the columns *subject* and *activity* were added, as described above. The remaining features were modified as described in the *Column Names* box.
 
 - subject
 - activity
@@ -652,3 +654,96 @@ The bands energy measurements were especially renamed to reflect the axis to whi
 - anglex_gravitymean
 - angley_gravitymean
 - anglez_gravitymean
+
+## The Average of Mean and Standard Deviation Fields Dataset
+
+### **average_dataset.csv**
+
+- subject
+- activity
+- average_tbodyacc_mean_x
+- average_tbodyacc_mean_y
+- average_tbodyacc_mean_z
+- average_tbodyacc_std_x
+- average_tbodyacc_std_y
+- average_tbodyacc_std_z
+- average_tgravityacc_mean_x
+- average_tgravityacc_mean_y
+- average_tgravityacc_mean_z
+- average_tgravityacc_std_x
+- average_tgravityacc_std_y
+- average_tgravityacc_std_z
+- average_tbodyaccjerk_mean_x
+- average_tbodyaccjerk_mean_y
+- average_tbodyaccjerk_mean_z
+- average_tbodyaccjerk_std_x
+- average_tbodyaccjerk_std_y
+- average_tbodyaccjerk_std_z
+- average_tbodygyro_mean_x
+- average_tbodygyro_mean_y
+- average_tbodygyro_mean_z
+- average_tbodygyro_std_x
+- average_tbodygyro_std_y
+- average_tbodygyro_std_z
+- average_tbodygyrojerk_mean_x
+- average_tbodygyrojerk_mean_y
+- average_tbodygyrojerk_mean_z
+- average_tbodygyrojerk_std_x
+- average_tbodygyrojerk_std_y
+- average_tbodygyrojerk_std_z
+- average_tbodyaccmag_mean
+- average_tbodyaccmag_std
+- average_tgravityaccmag_mean
+- average_tgravityaccmag_std
+- average_tbodyaccjerkmag_mean
+- average_tbodyaccjerkmag_std
+- average_tbodygyromag_mean
+- average_tbodygyromag_std
+- average_tbodygyrojerkmag_mean
+- average_tbodygyrojerkmag_std
+- average_fbodyacc_mean_x
+- average_fbodyacc_mean_y
+- average_fbodyacc_mean_z
+- average_fbodyacc_std_x
+- average_fbodyacc_std_y
+- average_fbodyacc_std_z
+- average_fbodyacc_meanfreq_x
+- average_fbodyacc_meanfreq_y
+- average_fbodyacc_meanfreq_z
+- average_fbodyaccjerk_mean_x
+- average_fbodyaccjerk_mean_y
+- average_fbodyaccjerk_mean_z
+- average_fbodyaccjerk_std_x
+- average_fbodyaccjerk_std_y
+- average_fbodyaccjerk_std_z
+- average_fbodyaccjerk_meanfreq_x
+- average_fbodyaccjerk_meanfreq_y
+- average_fbodyaccjerk_meanfreq_z
+- average_fbodygyro_mean_x
+- average_fbodygyro_mean_y
+- average_fbodygyro_mean_z
+- average_fbodygyro_std_x
+- average_fbodygyro_std_y
+- average_fbodygyro_std_z
+- average_fbodygyro_meanfreq_x
+- average_fbodygyro_meanfreq_y
+- average_fbodygyro_meanfreq_z
+- average_fbodyaccmag_mean
+- average_fbodyaccmag_std
+- average_fbodyaccmag_meanfreq
+- average_fbodybodyaccjerkmag_mean
+- average_fbodybodyaccjerkmag_std
+- average_fbodybodyaccjerkmag_meanfreq
+- average_fbodybodygyromag_mean
+- average_fbodybodygyromag_std
+- average_fbodybodygyromag_meanfreq
+- average_fbodybodygyrojerkmag_mean
+- average_fbodybodygyrojerkmag_std
+- average_fbodybodygyrojerkmag_meanfreq
+- average_angletbodyaccmean_gravity
+- average_angletbodyaccjerkmean_gravitymean
+- average_angletbodygyromean_gravitymean
+- average_angletbodygyrojerkmean_gravitymean
+- average_anglex_gravitymean
+- average_angley_gravitymean
+- average_anglez_gravitymean
