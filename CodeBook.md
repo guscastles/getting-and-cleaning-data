@@ -72,15 +72,13 @@ The structure of the subjects dataset has just one column
 
 After the train, subjects and activities datasets are merged, the test dataset is joined using R function *rbind* in function *join_datasets*.
 
-### The Mean and Standard Deviation Datasets
+### The Final Datasets
 
-Once the *fetch_and_clean* function is run, the mean and standard deviation values are extractred, along with subject and activity features, accomplished by *create_mean_and_std_deviation_dataset* and *create_average_of_mean_and_std*.
+Once the *fetch_and_clean* function is run, the mean and standard deviation values are extractred, along with subject and activity features, accomplished by *create_mean_and_std_deviation_dataset* and *create_average_of_mean_and_std*. The averages of all mean and standard deviation values are calculated with the latter, whilst the former produces the tidy dataset from the train and test datasets, along with subjects and activites.
 
-Then, the averages of all mean and standard deviation values are calculated
+### The Output
 
-For the final step, the files are written on disk
-
-To run the whole project use function run_project, with no parameters required
+For the final step, the files are written on disk using function *create_dataset_files*.
 
 ### The Main Function
 
