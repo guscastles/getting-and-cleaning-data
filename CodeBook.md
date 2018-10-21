@@ -22,36 +22,36 @@ using the function *fetch_data(url)*. Unzipping the file produces a directory ca
 - features_info.txt
 - features.txt
 - README.txt
-  - test
-    - Inertial Signals
-      - body_acc_x_test.txt
-      - body_acc_y_test.txt
-      - body_acc_z_test.txt
-      - body_gyro_x_test.txt
-      - body_gyro_y_test.txt
-      - body_gyro_z_test.txt
-      - total_acc_x_test.txt
-      - total_acc_y_test.txt
-      - total_acc_z_test.txt
-    - subject_test.txt
-    - X_test.txt
-    - y_test.txt
-  - train
-    - Inertial Signals
-      - body_acc_x_train.txt
-      - body_acc_y_train.txt
-      - body_acc_z_train.txt
-      - body_gyro_x_train.txt
-      - body_gyro_y_train.txt
-      - body_gyro_z_train.txt
-      - total_acc_x_train.txt
-      - total_acc_y_train.txt
-      - total_acc_z_train.txt
-    - subject_train.txt
-    - X_train.txt
-    - y_train.txt
+- **test**
+  - **Inertial Signals**
+    - body_acc_x_test.txt
+    - body_acc_y_test.txt
+    - body_acc_z_test.txt
+    - body_gyro_x_test.txt
+    - body_gyro_y_test.txt
+    - body_gyro_z_test.txt
+    - total_acc_x_test.txt
+    - total_acc_y_test.txt
+    - total_acc_z_test.txt
+  - subject_test.txt
+  - X_test.txt
+  - y_test.txt
+- **train**
+  - **Inertial Signals**
+    - body_acc_x_train.txt
+    - body_acc_y_train.txt
+    - body_acc_z_train.txt
+    - body_gyro_x_train.txt
+    - body_gyro_y_train.txt
+    - body_gyro_z_train.txt
+    - total_acc_x_train.txt
+    - total_acc_y_train.txt
+    - total_acc_z_train.txt
+  - subject_train.txt
+  - X_train.txt
+  - y_train.txt
 
-The files in the *Inertial Signals* folder were not considered for this project.
+The files in the *Inertial Signals* folders were not considered for this project.
 
 ### Fetching The Features Datasets
 The datasets in the *X_test.txt* and *X_train.txt* files have 561 fields, according to the *features_info.txt*. Function *fetch_and_clean* orchestrates the reading and cleaning of the main dataset. 
@@ -69,7 +69,6 @@ There are two main files to understand the activities labels: *activity_labels.t
 The structure of the activities dataset has just one column
 
 > activity
-
 
 Once read and merged with subjects and labels, the train and test datasets are joined with rbind function
 

@@ -13,14 +13,14 @@ run_project <- function() {
                 cat(msg, sep = "\n")
         }
         
-        message("Downloading source dataset...")
-        download_data("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
+        #message("Downloading source dataset...")
+        #download_data("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
         message("Cleaning and joining train and test datasets...")
         data <- fetch_and_clean()
         message("Creating the mean and standard deviation dataset...")
         mean_std_dataset <- data %>% create_mean_and_std_deviation_dataset
         message("Creating averages of the mean and standard deviation values...")
-        avg_dataset <- mean_std_dataset[-(1:2)] %>% create_average_of_mean_and_std
+        avg_dataset <- mean_std_dataset %>% create_average_of_mean_and_std
         message("Saving both datasets...")
         create_dataset_files(mean_std_dataset, avg_dataset)
         message("Finished!")
@@ -165,11 +165,30 @@ create_mean_and_std_deviation_dataset <- function(dataset) {
 # Receives the dataset with the mean and standard deviation features only
 # and return a dataset with the average values for each feature.
 create_average_of_mean_and_std <- function(dataset) {
-        avg <- as.data.frame(sapply(dataset, mean))
-        colnames(avg) <- c("average")
-        average <- cbind(measurement = rownames(avg), avg)
-        rownames(average) <- 1:nrow(average)
-        average
+        
+        create_first_grouped_average <- function(col) {
+                summarise(grouped, mean(!!sym(col)))
+        }
+        
+        create_remaining_grouped_averages <- function(cols) {
+                sapply(cols, calculate_average)
+        }
+        
+        calculate_average <- function(col) {
+                unlist(summarise(grouped, mean(!!sym(col)))[3])
+        }
+        
+        change_column_name <- function(col_name) {
+                paste0("average_", col_name)        
+        }
+        
+        mean_std_cols <- colnames(dataset)[-(1:2)]
+        grouped <- dataset %>% group_by(subject, activity)
+        first_average <- create_first_grouped_average(mean_std_cols[1])
+        averages <- create_remaining_grouped_averages(mean_std_cols[2:length(mean_std_cols)]) 
+        avg <- data.frame(first_average, averages)
+        colnames(avg) <- c(colnames(dataset)[1:2], sapply(mean_std_cols, change_column_name))
+        avg
 }
 
 # Receives the mean and standard deviation features dataset mean_stdev_data
