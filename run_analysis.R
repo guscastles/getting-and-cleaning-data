@@ -13,8 +13,8 @@ run_project <- function() {
                 cat(msg, sep = "\n")
         }
         
-        #message("Downloading source dataset...")
-        #download_data("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
+        message("Downloading source dataset...")
+        download_data("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
         message("Cleaning and joining train and test datasets...")
         data <- fetch_and_clean()
         message("Creating the mean and standard deviation dataset...")
