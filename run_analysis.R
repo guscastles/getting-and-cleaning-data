@@ -4,9 +4,6 @@
 library(dplyr)
 library(lubridate)
 
-# Runs all necessary functions to accomplish the goal of the project.
-# Creates the two outcome datasets and the timestamp file, as 
-# explained int the README.md document.
 run_project <- function() {
         
         message <- function(msg) {
@@ -26,10 +23,6 @@ run_project <- function() {
         message("Finished!")
 }
 
-# Fetches the data from the given url, automatically
-# unziping it and picking its name. It assumes the 
-# current folder is the destination folder.
-# Returns the name of the downloade file.
 download_data <- function(url) {
         splitted <- strsplit(url, "%20")
         dest_file <- tail(unlist(splitted), 1)
@@ -41,9 +34,6 @@ download_data <- function(url) {
         dest_file
 }
 
-# The function *fetch_and_clean* executes the previous functions. 
-# It is run without any parameters and return a tidy dataset,
-# with train and test data joined
 fetch_and_clean <- function() {
         train_data <- tbl_df(cbind(fetch_subjects("train"),
                                    fetch_activities("train"),
@@ -54,8 +44,6 @@ fetch_and_clean <- function() {
         join_datasets(train_data, test_data)
 }
 
-# Receives a data_set_indicator (values are train or test).
-# Returns a data.frame object containing the subject numbers.
 fetch_subjects <- function(data_set_indicator) {
         subjects <- read_additional_data(paste("UCI HAR Dataset",
                                                data_set_indicator,
@@ -65,9 +53,6 @@ fetch_subjects <- function(data_set_indicator) {
         subjects
 }
 
-# Receives a data_set_indicator (values are train or test).
-# Returns a data.frame object containing the activities labels,
-# in descriptive format.
 fetch_activities <- function(data_set_indicator) {
         raw_labels_data <- read_additional_data(paste("UCI HAR Dataset",
                                                    data_set_indicator,
@@ -79,8 +64,6 @@ fetch_activities <- function(data_set_indicator) {
 }
 
 
-# Receives a data_set_indicator (values are train or test).
-# Returns a data.frame object containing the features dataset.
 fetch_features_set <- function(data_set_indicator) {
         dataset <- read_data(paste("UCI HAR Dataset",
                                      data_set_indicator, paste0("X_", data_set_indicator, ".txt"),
@@ -89,9 +72,6 @@ fetch_features_set <- function(data_set_indicator) {
         dataset        
 }
 
-# Reads the data from filename using function *read.fwf*. Optionally 
-# receives number_of_lines, indicating how many lines should be read
-# from the file. Returns the raw dataset.
 read_data <- function(filename, number_of_lines = -1) {
         
         field_widths <- function() {
@@ -101,24 +81,14 @@ read_data <- function(filename, number_of_lines = -1) {
         read.fwf(filename, widths = field_widths(), n = number_of_lines)
 }
 
-# Additional data from the activities and labels datasets are fetched
-# with *read_additional_data* function, since they have a different
-# structure (space delimited). Receives the filename and, optionally,
-# the number_of_lines to be read. Returns the raw dataset.
 read_additional_data <- function(filename, number_of_lines = -1) {
         read.delim(filename, sep = " ", header = FALSE, nrows = number_of_lines)
 }
 
-# Joins two datasets given by first_set and second_set
-# returning the result from the rbind function.
 join_datasets <- function(first_set, second_set) {
         rbind(first_set, second_set)
 }
 
-# Receives a filename of the data file containing the column names
-# of the dataset and return a modified vector with unique column
-# names, all lowercase and without special characters, like "(", ")",
-# ",", or "-".
 create_column_names <- function(filename) {
         data <- read.delim("UCI HAR Dataset/features.txt", sep = " ", header = FALSE)
         col_names <- data %>%
@@ -138,9 +108,6 @@ create_column_names <- function(filename) {
         change_bands_energy_names(col_names)
 }
 
-# Especifically for the bands energy features in coln_names
-# that are repeated for each axis, returns unique names
-# with the axis suffix "X", "Y", or "Z", accordingly.
 change_bands_energy_names <- function(col_names) {
         
         change <- function(df) {
@@ -162,17 +129,12 @@ change_bands_energy_names <- function(col_names) {
         col_names$V2
 }
 
-# Receives the full dataset and returns a dataset with 
-# the mean and standard deviation features only, along with
-# the subjects and activities values.
 create_mean_and_std_deviation_dataset <- function(dataset) {
         cols <- grep("subject|activity|Mean|StandardDeviation", colnames(dataset))
         col_names <- colnames(dataset)[cols]
         dataset[col_names]
 }
 
-# Receives the dataset with the mean and standard deviation features only
-# and return a dataset with the average values for each feature.
 create_average_of_mean_and_std <- function(dataset) {
         
         change_column_name <- function(col_name) {
@@ -186,9 +148,6 @@ create_average_of_mean_and_std <- function(dataset) {
         avg
 }
 
-# Receives the mean and standard deviation features dataset mean_stdev_data
-# and their average dataset average_data. Writes both datasets to disk,
-# with names mean_and_std_dataset.csv and average_dataset.csv.
 create_dataset_files <- function(mean_stdev_data, average_data) {
         write.table(mean_stdev_data, file = "mean_and_std_dataset.txt", row.names = FALSE)
         write.table(average_data, file = "average_dataset.txt", row.names = FALSE)
