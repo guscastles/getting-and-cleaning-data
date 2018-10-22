@@ -24,8 +24,9 @@ The script *run_analisys.R* contains the functions with descriptive comments for
 - create_mean_and_std_deviation_dataset
 - create_average_of_mean_and_std
 - create_dataset_files
+## Output Datasets
 
-Besides the script and documentation files, two datasets are include
+The two output datasets are
 
 > **[mean_and_std_dataset.txt](https://github.com/guscastles/getting-and-cleaning-data/blob/master/mean_and_std_dataset.txt)**<br>
 The dataset with mean and standard deviation values, as well as the subject numbers and the descriptive activities

@@ -14,7 +14,7 @@ run_project <- function() {
         }
         
         message("Downloading source dataset...")
-        download_data("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
+        #download_data("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
         message("Cleaning and joining train and test datasets...")
         data <- fetch_and_clean()
         message("Creating the mean and standard deviation dataset...")
@@ -123,31 +123,41 @@ join_datasets <- function(first_set, second_set) {
 create_column_names <- function(filename) {
         data <- read.delim("UCI HAR Dataset/features.txt", sep = " ", header = FALSE)
         col_names <- data %>%
+                mutate(V2 = gsub(",|\\-", "", V2)) %>%
                 mutate(V2 = gsub("\\(|\\)", "", V2)) %>%
-                mutate(V2 = gsub(",|\\-", "_", V2)) %>%
-                mutate(V2 = tolower(V2))
+                mutate(V2 = sub("Acc", "Acceleration", V2)) %>%
+                mutate(V2 = sub("Gyro", "Gyroscope", V2)) %>%
+                mutate(V2 = sub("^t", "time", V2)) %>%
+                mutate(V2 = sub("^anglet", "angleTime", V2)) %>%
+                mutate(V2 = sub("^f", "frequencyDomain", V2)) %>%
+                mutate(V2 = sub("Freq", "Frequency", V2)) %>%
+                mutate(V2 = gsub("mean", "Mean", V2)) %>%
+                mutate(V2 = sub("std", "StandardDeviation", V2)) %>%
+                mutate(V2 = sub("Mag", "Magnitude", V2)) %>%
+                mutate(V2 = sub("gravity", "Gravity", V2)) %>%
+                mutate(V2 = sub("bands", "Bands", V2))
         change_bands_energy_names(col_names)
 }
 
 # Especifically for the bands energy features in coln_names
 # that are repeated for each axis, returns unique names
-# with the axis suffix "_x", "_y", or "_z", accordingly.
+# with the axis suffix "X", "Y", or "Z", accordingly.
 change_bands_energy_names <- function(col_names) {
         
         change <- function(df) {
                 changed <- df %>% 
                         select(V1, V2, V3, V4, V5, V6, V7, V8, V9) %>%
-                        mutate(V1 = add_suffix(V1, "_x"), V2 = add_suffix(V2, "_y"), V3 = add_suffix(V3, "_z"),
-                               V4 = add_suffix(V4, "_x"), V5 = add_suffix(V5, "_y"), V6 = add_suffix(V6, "_z"),
-                               V7 = add_suffix(V7, "_x"), V8 = add_suffix(V8, "_y"), V9 = add_suffix(V9, "_z"))
+                        mutate(V1 = addsuffix(V1, "X"), V2 = addsuffix(V2, "Y"), V3 = addsuffix(V3, "Z"),
+                               V4 = addsuffix(V4, "X"), V5 = addsuffix(V5, "Y"), V6 = addsuffix(V6, "Z"),
+                               V7 = addsuffix(V7, "X"), V8 = addsuffix(V8, "Y"), V9 = addsuffix(V9, "Z"))
                 as.character(unlist(changed))
         }
         
-        add_suffix <- function(value, suffix) {
-                paste0(value, suffix) %>% tolower
+        addsuffix <- function(value, suffix) {
+                paste0(value, suffix)
         }
         
-        bandsenergy_rows <- grep("bandsenergy", col_names$V2)
+        bandsenergy_rows <- grep("BandsEnergy", col_names$V2)
         bandsenergy <- matrix(col_names[bandsenergy_rows, "V2"], ncol = 9)
         col_names[bandsenergy_rows, "V2"] <- bandsenergy %>% tbl_df %>% change
         col_names$V2
@@ -157,7 +167,7 @@ change_bands_energy_names <- function(col_names) {
 # the mean and standard deviation features only, along with
 # the subjects and activities values.
 create_mean_and_std_deviation_dataset <- function(dataset) {
-        cols <- grep("subject|activity|mean|std", colnames(dataset))
+        cols <- grep("subject|activity|Mean|StandardDeviation", colnames(dataset))
         col_names <- colnames(dataset)[cols]
         dataset[col_names]
 }
@@ -179,7 +189,9 @@ create_average_of_mean_and_std <- function(dataset) {
         }
         
         change_column_name <- function(col_name) {
-                paste0("average_", col_name)        
+                paste0("average",
+                       toupper(substring(col_name, 1, 1)),
+                       substring(col_name, 2))
         }
         
         mean_std_cols <- colnames(dataset)[-(1:2)]
