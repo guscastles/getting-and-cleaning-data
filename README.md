@@ -1,12 +1,11 @@
 # Getting And Cleaning Data
 ## Peer reviewed project for the Getting and Cleaning Data course from Johns Hopkins
 
-This project contains 4 main files:
+This project contains 3 main files:
 
 - [run_analysis.R](https://github.com/guscastles/getting-and-cleaning-data/blob/master/run_analysis.R) -- Contains all the R functions used to achieve the project's goal
 - [CodeBook.md](https://github.com/guscastles/getting-and-cleaning-data/blob/master/CodeBook.md) -- The code book explaining all variables and datasets, including how to get the original dataset and how the functions work
 - This README.md -- The main guide for the project
-- [download_timestamp.txt](https://github.com/guscastles/getting-and-cleaning-data/blob/master/download_timestamp.txt) -- Contains the download time of the source dataset
 
 > The original dataset [url](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip) is available from [Amazon CloudFront](https://aws.amazon.com/cloudfront/).
 
