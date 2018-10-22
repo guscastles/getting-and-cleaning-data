@@ -87,7 +87,7 @@ The function *run_project* executes the previous functions. It is run without an
 ## The Mean and Standard Deviation Dataset
 
 ### **mean_and_std_dataset.txt**
-From the original dataset, the columns *subject* and *activity* were added, as described above. The remaining features were modified as described in the *Column Names* box. Units are the same as per the original dataset.
+From the original dataset, the columns *subject* and *activity* were added, as described above. The remaining features were modified as described in the *Column Names* box. Units are the same as per the original dataset. There are 10,299 observations and 88 features.
 
 - subject
 - activity
@@ -187,6 +187,7 @@ Measurement units are per the original dataset features, e.g.
 averageTimeBodyAccelerationMeanX \sim timeBodyAccelerationMeanX)
 \end{equation*}
 
+There are 180 rows, with 88 columns.
 
 - subject
 - activity
