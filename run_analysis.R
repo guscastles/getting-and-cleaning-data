@@ -33,9 +33,11 @@ run_project <- function() {
 download_data <- function(url) {
         splitted <- strsplit(url, "%20")
         dest_file <- tail(unlist(splitted), 1)
-        download.file(url, destfile = dest_file)
-        unzip(dest_file)
-        cat(as.character(now()), file = "download_timestamp.txt")
+        if (!file.exists(dest_file)) {
+                download.file(url, destfile = dest_file)
+                unzip(dest_file)
+                cat(as.character(now()), file = "download_timestamp.txt")
+        }
         dest_file
 }
 
@@ -72,11 +74,8 @@ fetch_activities <- function(data_set_indicator) {
                                                    paste0("y_", data_set_indicator, ".txt"),
                                                    sep = "/"))
         labels <- read_additional_data("UCI HAR Dataset/activity_labels.txt")
-        activities <- raw_labels_data %>%
-                mutate(activity = labels[V1, "V2"]) %>%
-                select(activity)
-        colnames(activities) <- c("activity")
-        activities                
+        raw_labels_data$activity <- factor(raw_labels_data$V1, levels = labels$V1, labels = labels$V2)
+        raw_labels_data %>% select(activity)
 }
 
 
@@ -176,30 +175,14 @@ create_mean_and_std_deviation_dataset <- function(dataset) {
 # and return a dataset with the average values for each feature.
 create_average_of_mean_and_std <- function(dataset) {
         
-        create_first_grouped_average <- function(col) {
-                summarise(grouped, mean(!!sym(col)))
-        }
-        
-        create_remaining_grouped_averages <- function(cols) {
-                sapply(cols, calculate_average)
-        }
-        
-        calculate_average <- function(col) {
-                unlist(summarise(grouped, mean(!!sym(col)))[3])
-        }
-        
         change_column_name <- function(col_name) {
                 paste0("average",
                        toupper(substring(col_name, 1, 1)),
                        substring(col_name, 2))
         }
         
-        mean_std_cols <- colnames(dataset)[-(1:2)]
-        grouped <- dataset %>% group_by(subject, activity)
-        first_average <- create_first_grouped_average(mean_std_cols[1])
-        averages <- create_remaining_grouped_averages(mean_std_cols[2:length(mean_std_cols)]) 
-        avg <- data.frame(first_average, averages)
-        colnames(avg) <- c(colnames(dataset)[1:2], sapply(mean_std_cols, change_column_name))
+        avg <- aggregate(dataset[-(1:2)], by = list(dataset$subject, dataset$activity), FUN = mean)
+        colnames(avg) <- c(colnames(dataset)[1:2], sapply(colnames(dataset)[-(1:2)], change_column_name))
         avg
 }
 
