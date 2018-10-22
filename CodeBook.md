@@ -86,7 +86,7 @@ The function *run_project* executes the previous functions. It is run without an
 
 ## The Mean and Standard Deviation Dataset
 
-### **mean_and_std_dataset.csv**
+### **mean_and_std_dataset.txt**
 From the original dataset, the columns *subject* and *activity* were added, as described above. The remaining features were modified as described in the *Column Names* box.
 
 - subject
@@ -655,7 +655,7 @@ From the original dataset, the columns *subject* and *activity* were added, as d
 
 ## The Average of Mean and Standard Deviation Fields Dataset
 
-### **average_dataset.csv**
+### **average_dataset.txt**
 
 - subject
 - activity

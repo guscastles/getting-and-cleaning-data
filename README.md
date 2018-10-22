@@ -27,10 +27,10 @@ The script *run_analisys.R* contains the functions with descriptive comments for
 
 Besides the script and documentation files, two datasets are include
 
-> **[mean_and_std_dataset.csv](https://github.com/guscastles/getting-and-cleaning-data/blob/master/mean_and_std_dataset.csv)**<br>
+> **[mean_and_std_dataset.txt](https://github.com/guscastles/getting-and-cleaning-data/blob/master/mean_and_std_dataset.txt)**<br>
 The dataset with mean and standard deviation values, as well as the subject numbers and the descriptive activities
 
-> **[average_dataset.csv](https://github.com/guscastles/getting-and-cleaning-data/blob/master/average_dataset.csv)**<br>
+> **[average_dataset.txt](https://github.com/guscastles/getting-and-cleaning-data/blob/master/average_dataset.txt)**<br>
 The average values for all mean and standard deviation measurements
 
 ## Executing the Project

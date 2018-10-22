@@ -13,8 +13,8 @@ run_project <- function() {
                 cat(msg, sep = "\n")
         }
         
-        #message("Downloading source dataset...")
-        #download_data("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
+        message("Downloading source dataset...")
+        download_data("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
         message("Cleaning and joining train and test datasets...")
         data <- fetch_and_clean()
         message("Creating the mean and standard deviation dataset...")
@@ -195,6 +195,6 @@ create_average_of_mean_and_std <- function(dataset) {
 # and their average dataset average_data. Writes both datasets to disk,
 # with names mean_and_std_dataset.csv and average_dataset.csv.
 create_dataset_files <- function(mean_stdev_data, average_data) {
-        write.csv(mean_stdev_data, file = "mean_and_std_dataset.csv", row.names = FALSE)
-        write.csv(average_data, file = "average_dataset.csv", row.names = FALSE)
+        write.table(mean_stdev_data, file = "mean_and_std_dataset.txt", row.names = FALSE)
+        write.table(average_data, file = "average_dataset.txt", row.names = FALSE)
 }
